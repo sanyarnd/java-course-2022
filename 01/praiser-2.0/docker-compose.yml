@@ -1,0 +1,23 @@
+version: '3.7'
+
+
+services:
+  app:
+    image: arpmipg/tinkoff-edu:praiser-2.0
+    ports:
+      - 8080:8080
+
+
+  postgres:
+    image: postgres:${POSTGRES_VERSION}
+    ports:
+      - 5433:5432 # for external administration
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+
+volumes:
+  postgres-data:
+    name: ${COMPOSE_PROJECT_NAME}-postgres-data

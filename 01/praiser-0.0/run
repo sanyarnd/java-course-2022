@@ -1,0 +1,9 @@
+chcp 1251
+
+java -Dfile.encoding=UTF-8 Praiser.java
+
+javac -encoding UTF-8 Praiser.java
+java Praiser
+
+jar cfe praiser.jar Praiser Praiser.class
+java -jar praiser.jar

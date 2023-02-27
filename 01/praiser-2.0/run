@@ -1,0 +1,8 @@
+java -jar target\praiser-2.0.jar
+
+docker build -t arpmipg/tinkoff-edu:praiser-2.0 .
+
+docker login -u arpmipg -p ghjzAPdeQrea7B9P
+docker push arpmipg/tinkoff-edu:praiser-2.0
+
+docker-compose up -d

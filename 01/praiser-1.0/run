@@ -1,0 +1,14 @@
+java -jar target\praiser-1.0.jar
+
+
+docker build -t praiser-1.0 .
+docker run -d praiser-1.0
+docker run -d -p 8080:8080 praiser-1.0
+
+
+docker build -t arpmipg/tinkoff-edu:praiser-1.0 .
+docker login -u arpmipg -p ***
+docker push arpmipg/tinkoff-edu:praiser-1.0
+
+docker pull arpmipg/tinkoff-edu:praiser-1.0
+docker run -p 8080:8080 -d arpmipg/tinkoff-edu:praiser-1.0
