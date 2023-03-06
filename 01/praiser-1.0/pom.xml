@@ -60,18 +60,4 @@
         </plugins>
     </build>
 
-
-    <repositories>
-        <repository>
-            <id>proxy-maven-central</id>
-            <url>https://nexus.tcsbank.ru/repository/mvn-maven-proxy/</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>central</id>
-            <url>https://nexus.tcsbank.ru/repository/mvn-maven-proxy/</url>
-        </pluginRepository>
-    </pluginRepositories>
-
 </project>
