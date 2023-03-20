@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    password: postgres
+    username: postgres
+  liquibase:
+    change-log: classpath:changelog.sql
+  jpa:
+    show-sql: true

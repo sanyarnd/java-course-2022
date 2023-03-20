@@ -1,0 +1,10 @@
+client:
+  - id: 1000
+    first_name: Sergey
+    last_name: Khvatov
+  - id: 1001
+    first_name: Evgeniy
+    last_name: Shiryaev
+  - id: 1002
+    first_name: Test
+    last_name: Test
