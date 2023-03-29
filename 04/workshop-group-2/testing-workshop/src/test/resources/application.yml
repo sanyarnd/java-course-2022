@@ -1,0 +1,11 @@
+weather:
+  url: http://mock:8090
+  apiKey: dummy
+spring:
+  datasource:
+    password: secret
+    username: postgres
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:postgresql:12:///report?TC_DAEMON=true
+  liquibase:
+    change-log: db/changelog/changelog-master.yml

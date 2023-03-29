@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: create-weather-table.yml
+      relativeToChangelogFile: true
