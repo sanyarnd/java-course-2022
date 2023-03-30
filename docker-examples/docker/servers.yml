@@ -1,0 +1,97 @@
+version: "3.3"
+services:
+  itemstorageDB:
+    image: postgres:13
+    container_name: itemstorageDB
+    environment:
+      POSTGRES_PASSWORD: "${POSTGRES_PASS:-pass}"
+      POSTGRES_USER: "${POSTGRES_USER:-usr}"
+      POSTGRES_DB: "${POSTGRES_ITEMSTORAGE:-demoDB}"
+      POSTGRES_HOST: itemstorageDB
+    ports:
+      - "5433:5432"
+    restart: always
+    networks:
+      - proxynet
+
+  saleordersDB:
+    image: postgres:13
+    container_name: saleordersDB
+    environment:
+      POSTGRES_PASSWORD: "${POSTGRES_PASS:-pass}"
+      POSTGRES_USER: "${POSTGRES_USER:-usr}"
+      POSTGRES_DB: "${POSTGRES_SALEORDERS:-demoDB}"
+      POSTGRES_HOST: saleordersDB
+    ports:
+      - "5434:5432"
+    restart: always
+    networks:
+      - proxynet
+  zookeeper:
+    image: confluentinc/cp-zookeeper:6.2.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - proxynet
+      
+  kafka:
+    image: confluentinc/cp-kafka:7.0.0
+    container_name: kafka-broker
+    ports:
+      - "9092:29092"
+    expose:
+      - "29092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENERS: LISTENER_1://kafka:29092,LISTENER_2://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_1://kafka:29092,LISTENER_2://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_1:PLAINTEXT,LISTENER_2:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    networks:
+      - proxynet
+
+  redis:
+    image: redis
+    container_name: redis_cache
+    hostname: "${REDIS_HOST:-redishost}"
+    ports:
+      - "6378:6379"
+    expose:
+      - "6379"
+    command: redis-server --requirepass "${REDIS_PASS:-redis}"
+    restart: always
+    environment:
+      REDIS_PASSWORD: "${REDIS_PASS:-redis}"
+      REDIS_REPLICATION_MODE: master
+    networks:
+      - proxynet
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin-server
+    ports:
+      - "9411:9411"
+    expose:
+      - "9411"
+    networks:
+      - proxynet
+
+  sonarqube:
+    image: sonarqube:lts
+    ports:
+      - 9005:9000
+    environment:
+      - SONAR_FORCEAUTHENTICATION=false
+
+networks:
+  proxynet:
+    external:
+      name: smallmarketplace_proxynet

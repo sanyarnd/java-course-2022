@@ -1,0 +1,31 @@
+server:
+  port: 8080
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /openapi/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui
+
+properties:
+  qweqweq:
+    foo: fooValue
+    bar: barValue
+    baz: 12345
+    somePropertyList:
+      - first
+      - second
+      - third
+      - fourth
+      - fifth
+    somePropertyMap:
+      - firstKey : firstValue
+      - secondKey : secondValue
+      - thirdKey : thirdValue
+      - fourthKey : fourthValue
+      - fifthKey : fifthValue
+
+property:
+  interval: 3000

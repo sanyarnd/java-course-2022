@@ -1,0 +1,59 @@
+version: '2'
+
+services:
+  profile-api:
+    image: nikitat57/profile-api:latest
+    container_name: profile-api
+    ports:
+      - "8182:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/compose-postgres
+      - SPRING_DATASOURCE_USERNAME=compose-postgres
+      - SPRING_DATASOURCE_PASSWORD=compose-postgres
+    restart: always
+    networks:
+      - dockernet
+
+  proposal-buy-api:
+    image: nikitat57/proposal-buy-api:latest
+    container_name: proposal-buy-api
+    ports:
+      - "8181:8080"
+    depends_on:
+      - db
+      - profile-api
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/compose-postgres
+      - SPRING_DATASOURCE_USERNAME=compose-postgres
+      - SPRING_DATASOURCE_PASSWORD=compose-postgres
+    restart: always
+    networks:
+      - dockernet
+
+  proposal-api:
+    image: nikitat57/proposal-api:latest
+    container_name: proposal-api
+    ports:
+      - "8183:8080"
+    depends_on:
+      - proposal-buy-api
+    restart: always
+    networks:
+      - dockernet
+          
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=compose-postgres
+      - POSTGRES_PASSWORD=compose-postgres
+    restart: always
+    networks:
+      - dockernet
+
+networks:
+  dockernet:

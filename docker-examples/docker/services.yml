@@ -1,0 +1,102 @@
+version: "3.3"
+services:
+  registry-service:
+    image: evgeny88docker/registry-service:1.0
+    container_name: registry-service
+    ports:
+      - "8761:8761"
+    environment:
+      eureka.instance.hostname: localhost
+      eureka.client.serviceUrl.defaultZone: http://registry-service:8761/eureka/
+      spring.cloud.config.server.git.uri: https://github.com/Evgeny0088/marketplaceConfigServer
+    restart: always
+    networks:
+      - proxynet
+      
+  config-service:
+    image: evgeny88docker/config-service:1.0
+    container_name: config-service
+    ports:
+      - "9000:9000"
+    environment:
+      eureka.instance.hostname: localhost
+      eureka.client.serviceUrl.defaultZone: http://registry-service:8761/eureka/
+      spring.cloud.config.server.git.uri: https://github.com/Evgeny0088/marketplaceConfigServer
+    restart: always
+    depends_on:
+      - registry-service
+    networks:
+      - proxynet
+
+  gateway-service:
+    image: evgeny88docker/gateway-service:1.0
+    container_name: gateway-service
+    ports:
+      - "8080:8080"
+    environment:
+      spring.cloud.config.uri: http://config-service:9000
+      eureka.instance.hostname: localhost
+      eureka.client.serviceUrl.defaultZone: http://registry-service:8761/eureka/
+    restart: always
+    depends_on:
+      - config-service
+      - registry-service
+    networks:
+      - proxynet
+
+  itemstorage-service:
+    image: evgeny88docker/itemstorage-service:1.0
+    container_name: itemstorage-service
+    ports:
+      - "8081:8081"
+    environment:
+      # services
+      spring.zipkin.base-url: http://zipkin-server:9411
+      spring.cloud.config.uri: http://config-service:9000
+      spring.kafka.bootstrap-servers: http://kafka:29092
+      eureka.instance.hostname: localhost
+      eureka.client.serviceUrl.defaultZone: http://registry-service:8761/eureka/
+      # redis
+      spring.redis.host: redishost
+      spring.redis.port: 6379
+      spring.redis.password: "${REDIS_PASS:-redis}"
+      # database
+      spring.datasource.username: "${POSTGRES_USER:-usr}"
+      spring.datasource.password: "${POSTGRES_PASS:-pass}"
+      spring.datasource.url: jdbc:postgresql://itemstorageDB:5432/itemstorage?serverTimezone=UTC&createDatabaseIfNotExist=true&autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+    restart: always
+    depends_on:
+      - config-service
+      - registry-service
+    networks:
+      - proxynet
+
+  saleorders-service:
+    image: evgeny88docker/saleorders-service:1.0
+    container_name: saleorders-service
+    ports:
+      - "8082:8082"
+    environment:
+      # servers
+      spring.zipkin.base-url: http://zipkin-server:9411
+      spring.kafka.bootstrap-servers: http://kafka:29092
+      spring.cloud.config.uri: http://config-service:9000
+      eureka.instance.hostname: localhost
+      eureka.client.serviceUrl.defaultZone: http://registry-service:8761/eureka/
+      # redis
+      spring.redis.host: redishost
+      spring.redis.port: 6379
+      spring.redis.password: "${REDIS_PASS:-redis}"
+      # database
+      spring.datasource.username: "${POSTGRES_USER:-usr}"
+      spring.datasource.password: "${POSTGRES_PASS:-pass}"
+      spring.datasource.url: jdbc:postgresql://saleordersDB:5432/saleorders?serverTimezone=UTC&createDatabaseIfNotExist=true&autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+    restart: always
+    depends_on:
+      - config-service
+      - registry-service
+    networks:
+      - proxynet
+
+networks:
+  proxynet:

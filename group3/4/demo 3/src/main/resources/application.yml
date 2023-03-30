@@ -1,0 +1,11 @@
+server:
+  port: 8180
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /openapi/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui
+
