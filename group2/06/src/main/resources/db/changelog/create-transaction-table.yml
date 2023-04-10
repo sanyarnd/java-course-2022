@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-transaction-table
+      author: d.sin
+      preConditions:
+        onFail: MARK_RAN
+        onError: WARN
+        not:
+          tableExists:
+            tableName: transactions
+      changes:
+        - createTable:
+            tableName: transactions
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    - primaryKey: true
+              - column:
+                  name: category
+                  type: text
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: amount
+                  type: numeric(20, 2)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: date
+                  type: timestamp
+                  constraints:
+                    - nullable: false

@@ -1,0 +1,11 @@
+weather:
+  url: https://api.weatherapi.com
+  apiKey: 9c2834955b0d443b969143513230803
+spring:
+  datasource:
+    password: secret
+    username: postgres
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+  liquibase:
+    change-log: db/changelog/changelog-master.yml

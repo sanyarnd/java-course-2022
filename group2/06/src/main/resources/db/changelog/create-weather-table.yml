@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-weather-table
+      author: d.sin
+      preConditions:
+        onFail: MARK_RAN
+        onError: WARN
+        not:
+          tableExists:
+            tableName: weather
+      changes:
+        - createTable:
+            tableName: weather
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    - primaryKey: true
+              - column:
+                  name: city
+                  type: text
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: date
+                  type: date
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: temperature
+                  type: double
+                  constraints:
+                    - nullable: false
