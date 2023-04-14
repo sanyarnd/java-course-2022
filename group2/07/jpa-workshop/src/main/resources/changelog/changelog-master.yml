@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: 1-create-team-table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: 2-create-player-table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: 3-create-tournament-table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: 4-create-game-table.yml
+      relativeToChangelogFile: true

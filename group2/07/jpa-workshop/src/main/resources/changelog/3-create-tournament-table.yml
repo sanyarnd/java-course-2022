@@ -1,0 +1,61 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3-create-tournament-table
+      author: d.sin
+      changes:
+        - createTable:
+            tableName: tournament
+            remarks: Данные о турнирах
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    - primaryKey: true
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: date_start
+                  type: timestamp
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: date_end
+                  type: timestamp
+              - column:
+                  name: city
+                  type: text
+              - column:
+                  name: version
+                  type: integer
+              - column:
+                  name: last_modified_date
+                  type: timestamp
+              - column:
+                  name: created_date
+                  type: timestamp
+        - createTable:
+            tableName: team_tournament
+            remarks: Таблица связи команд с турнирами
+            columns:
+              - column:
+                  name: team_id
+                  type: bigint
+                  constraints:
+                    - nullable: false
+                    - foreignKeyName: fk_team_tournament_team_id
+                    - references: team(id)
+              - column:
+                  name: tournament_id
+                  type: bigint
+                  constraints:
+                    - nullable: false
+                    - foreignKeyName: fk_team_tournament_tournament_id
+                    - references: tournament(id)
+        - addPrimaryKey:
+              columnNames: team_id, tournament_id
+              constraintName: pk_team_tournament
+              tableName: team_tournament

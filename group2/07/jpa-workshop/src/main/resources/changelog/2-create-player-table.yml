@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2-create-player-table
+      author: d.sin
+      changes:
+        - createTable:
+            tableName: player
+            remarks: Данные об игроках
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    - primaryKey: true
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: birth_date
+                  type: timestamp
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: team_id
+                  type: bigint
+                  constraints:
+                    - foreignKeyName: fk_team_id
+                    - references: team(id)
+              - column:
+                  name: version
+                  type: integer
+              - column:
+                  name: last_modified_date
+                  type: timestamp
+              - column:
+                  name: created_date
+                  type: timestamp

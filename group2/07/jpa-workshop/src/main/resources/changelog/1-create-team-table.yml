@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-create-team-table
+      author: d.sin
+      changes:
+        - createTable:
+            tableName: team
+            remarks: Данные о командах
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    - primaryKey: true
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: country
+                  type: text
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: rating
+                  type: integer
+              - column:
+                  name: version
+                  type: integer
+              - column:
+                  name: last_modified_date
+                  type: timestamp
+              - column:
+                  name: created_date
+                  type: timestamp

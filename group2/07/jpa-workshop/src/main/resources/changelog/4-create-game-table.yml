@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4-create-game-table
+      author: d.sin
+      changes:
+        - createTable:
+            tableName: game
+            remarks: Данные об ихграх
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    - primaryKey: true
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: birth_date
+                  type: text
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: team_first_id
+                  type: bigint
+                  constraints:
+                    - nullable: false
+                    - foreignKeyName: fk_team_first_id
+                    - references: team(id)
+              - column:
+                  name: team_second_id
+                  type: bigint
+                  constraints:
+                    - nullable: false
+                    - foreignKeyName: fk_team_second_id
+                    - references: team(id)
+              - column:
+                  name: team_first_points
+                  type: integer
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: team_second_points
+                  type: integer
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: version
+                  type: integer
+              - column:
+                  name: last_modified_date
+                  type: timestamp
+              - column:
+                  name: created_date
+                  type: timestamp
