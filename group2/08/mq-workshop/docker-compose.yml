@@ -1,0 +1,63 @@
+version: '3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.1.2
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+  kafka:
+    image: confluentinc/cp-kafka:7.1.2
+    ports:
+      - "9093:9093"
+      - "9092:9092"
+      - "29092:29092"
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.1.2
+    ports:
+      - "28081:8081"
+    depends_on:
+      - kafka
+    environment:
+      - SCHEMA_REGISTRY_HOST_NAME=schema_registry
+      - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
+      - SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS=PLAINTEXT://kafka:9092
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=secret
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+  rabbitmq:
+    image: 'rabbitmq:3.6-management-alpine'
+    ports:
+      # The standard AMQP protocol port
+      - '5672:5672'
+      # HTTP management UI
+      - '15672:15672'
+    environment:
+      # The location of the RabbitMQ server.  "amqp" is the protocol;
+      # "rabbitmq" is the hostname.  Note that there is not a guarantee
+      # that the server will start first!  Telling the pika client library
+      # to try multiple times gets around this ordering issue.
+      AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+
+volumes:
+  rabbitmq_data:
+    driver: local

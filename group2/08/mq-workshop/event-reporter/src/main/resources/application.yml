@@ -1,0 +1,7 @@
+kafka:
+  bootstrap-servers: localhost:29092
+  schema-registry:
+    url: http://localhost:28081
+  events:
+    group-id: event.reporter
+    topic: example.event

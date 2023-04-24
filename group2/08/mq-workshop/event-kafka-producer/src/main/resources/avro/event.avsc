@@ -1,0 +1,31 @@
+{
+  "type": "record",
+  "name": "Event",
+  "namespace": "com.example.event",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long"
+    },
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "type",
+      "type": "string"
+    },
+    {
+      "name": "date",
+      "type": [
+        "null",
+        {
+          "type": "long",
+          "logicalType": "timestamp-millis"
+        }
+      ],
+      "default": null
+    }
+  ],
+  "version": "1"
+}

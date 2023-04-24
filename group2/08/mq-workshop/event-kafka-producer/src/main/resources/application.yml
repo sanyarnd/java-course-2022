@@ -1,0 +1,8 @@
+kafka:
+  bootstrap-servers: localhost:29092
+  schema-registry:
+    url: http://localhost:28081
+  events:
+    topic: example.event
+server:
+  port: 9000
